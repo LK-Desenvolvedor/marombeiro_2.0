@@ -6,9 +6,10 @@ exports.createUser = async (req, res) => {
     const user = await newUser.save();
     res.status(201).json(user);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: "Falha ao criar usuário", error: error.message });
   }
 };
+
 
 exports.getAllUsers = async (req, res) => {
   try {

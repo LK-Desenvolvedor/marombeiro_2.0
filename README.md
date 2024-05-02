@@ -26,6 +26,7 @@ Liste as tecnologias principais utilizadas no desenvolvimento da sua API. Por ex
 Node.js
 Express.js
 MongoDB
+Cors
 JSON Web Tokens (JWT)
 bcrypt (para hash de senhas)
 5. Instalação e Execução Local
@@ -33,8 +34,14 @@ Forneça instruções sobre como instalar e executar sua API localmente. Isso po
 
 5. Necessário
 
-.env - Não foi subido
+.env 
+
 Node modules
+
 mongoose
+
 bcrypt
+
 express
+
+cors

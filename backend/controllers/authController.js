@@ -7,7 +7,7 @@ exports.register = async (req, res) => {
     const { name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Falha de autenticação" });
+      return res.status(400).json({ message: "Erro de cadastro: Email ou senha já existem" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function App() {
    const [username, setUsername] = React.useState('');
@@ -12,12 +13,38 @@ function App() {
 
    const handleSubmit = (event) => {
      event.preventDefault();
- 
-     if (username === 'user' && password === '1234') {
-       window.location.href = '/'
-     } else {
+     axios.post('http://localhost:5000/auth/login', {
+       email: username,
+       password: password
+     })
+
+     .then(response => {
+       localStorage.setItem('token', response.data.token);
+
+       window.location.href = '/CRUD';
+     })
+
+     .catch(error => {
+       console.error('Erro no login:', error);
        setWrongLogin(true);
-     }
+     });
+   }
+
+   const handleRegister = (event) => {
+     event.preventDefault();
+
+     axios.post('http://localhost:5000/auth/register', {
+       name: newusername,
+       email: newusername, // Use o email como username, mas pode ser mudado
+       password: newpassword
+     })
+     .then(response => {
+       console.log('Registro bem-sucedido:', response.data);
+     })
+     .catch(error => {
+       console.error('Erro no registro:', error);
+       setWrongregister(true);
+     });
    }
 
   return (
@@ -38,16 +65,31 @@ function App() {
                         <h4 className="mb-4 pb-3">Log In</h4>
                         <h1>Conosco é que se constrói fibra</h1>
                         <br></br>
-      <img src="marombeiro.png" alt="logo" width="200" />
-                        <div className="form-group">
-                          <input type="email" className="form-style" placeholder="Email" />
-                          <i className="input-icon uil uil-at" />
-                        </div>
-                        <div className="form-group mt-2">
-                          <input type="password" className="form-style" placeholder="Password" />
-                          <i className="input-icon uil uil-lock-alt" />
-                        </div>
-                        <a href="" className="btn mt-4">Login</a>
+                        <img src="marombeiro.png" alt="logo" width="200" />
+                        <form onSubmit={handleSubmit}>
+                          <div className="form-group">
+                            <input
+                              type="email"
+                              className="form-style"
+                              placeholder="Email"
+                              value={username}
+                              onChange={(e) => setUsername(e.target.value)}
+                            />
+                            <i className="input-icon uil uil-at" />
+                          </div>
+                          <div className="form-group mt-2">
+                            <input
+                              type="password"
+                              className="form-style"
+                              placeholder="Password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <i className="input-icon uil uil-lock-alt" />
+                          </div>
+                          <button type="submit" className="btn mt-4">Login</button>
+                          {wrongLogin && <p className="error-message">Login inválido. Por favor, tente novamente.</p>}
+                        </form>
                         <p className="mb-0 mt-4 text-center">
                           <a href="" className="link">Forgot your password?</a>
                         </p>
@@ -58,24 +100,41 @@ function App() {
                     <div className="center-wrap">
                       <div className="section text-center">
                         <h4 className="mb-3 pb-3">Sign Up</h4>
-      <img src="marombeiro.png" alt="logo" width="200" />
-                        <div className="form-group">
-                          <input type="text" className="form-style" placeholder="Full Name" />
-                          <i className="input-icon uil uil-user" />
-                        </div>
-                        <div className="form-group mt-2">
-                          <input type="tel" className="form-style" placeholder="Phone Number" />
-                          <i className="input-icon uil uil-phone" />
-                        </div>
-                        <div className="form-group mt-2">
-                          <input type="email" className="form-style" placeholder="Email" />
-                          <i className="input-icon uil uil-at" />
-                        </div>
-                        <div className="form-group mt-2">
-                          <input type="password" className="form-style" placeholder="Password" />
-                          <i className="input-icon uil uil-lock-alt" />
-                        </div>
-                        <a href="" className="btn mt-4">Register</a>
+                        <img src="marombeiro.png" alt="logo" width="200" />
+                        <form onSubmit={handleRegister}>
+                          <div className="form-group">
+                            <input
+                              type="text"
+                              className="form-style"
+                              placeholder="Full Name"
+                              value={newusername}
+                              onChange={(e) => setnewUsername(e.target.value)}
+                            />
+                            <i className="input-icon uil uil-user" />
+                          </div>
+                          <div className="form-group mt-2">
+                            <input
+                              type="email"
+                              className="form-style"
+                              placeholder="Email"
+                              value={newusername}
+                              onChange={(e) => setnewUsername(e.target.value)}
+                            />
+                            <i className="input-icon uil uil-at" />
+                          </div>
+                          <div className="form-group mt-2">
+                            <input
+                              type="password"
+                              className="form-style"
+                              placeholder="Password"
+                              value={newpassword}
+                              onChange={(e) => setnewPassword(e.target.value)}
+                            />
+                            <i className="input-icon uil uil-lock-alt" />
+                          </div>
+                          <button type="submit" className="btn mt-4">Register</button>
+                          {wrongRegister && <p className="error-message">Erro ao registrar. Por favor, tente novamente.</p>}
+                        </form>
                       </div>
                     </div>
                   </div>
@@ -115,5 +174,3 @@ function Carrossel() {
 }
 
 export default App;
-
-

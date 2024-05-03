@@ -2,14 +2,16 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function App() {
+function Login() {
    const [username, setUsername] = React.useState('');
    const [password, setPassword] = React.useState('');
    const [wrongLogin, setWrongLogin] = React.useState(false);
-   const [newusername, setnewUsername] = React.useState('');
-   const [newpassword, setnewPassword] = React.useState('');
-   const [wrongRegister, setWrongregister] = React.useState(false);
-   const [isChecked, setIsChecked] = React.useState(false); // Adicionado estado para controlar o checkbox
+   const [newusername, setNewUsername] = React.useState('');
+   const [newemail, setNewEmail] = React.useState(''); // Adicionando estado para o novo email
+   const [newpassword, setNewPassword] = React.useState('');
+   const [registerSuccess, setRegisterSuccess] = React.useState(false);
+   const [registerError, setRegisterError] = React.useState(false);
+   const [isChecked, setIsChecked] = React.useState(false); 
 
    const handleSubmit = (event) => {
      event.preventDefault();
@@ -35,22 +37,27 @@ function App() {
 
      axios.post('http://localhost:5000/auth/register', {
        name: newusername,
-       email: newusername, // Use o email como username, mas pode ser mudado
+       email: newemail,
        password: newpassword
      })
      .then(response => {
        console.log('Registro bem-sucedido:', response.data);
+       setNewUsername('');
+       setNewEmail('');
+       setNewPassword('');
+       setRegisterSuccess(true);
+       setRegisterError(false);
      })
      .catch(error => {
        console.error('Erro no registro:', error);
-       setWrongregister(true);
+       setRegisterError(true);
+       setRegisterSuccess(false);
      });
    }
-
   return (
     <div className="section">
       <Carrossel/>
-      <div className="App">
+      <div className="Login">
         <div className="row full-height justify-content-center">
           <div className="col-12 text-center align-self-center py-5">
             <div className="section pb-5 pt-5 pt-sm-2 text-center">
@@ -108,17 +115,17 @@ function App() {
                               className="form-style"
                               placeholder="Full Name"
                               value={newusername}
-                              onChange={(e) => setnewUsername(e.target.value)}
+                              onChange={(e) => setNewUsername(e.target.value)}
                             />
                             <i className="input-icon uil uil-user" />
                           </div>
-                          <div className="form-group mt-2">
+                          <div className="form-group">
                             <input
                               type="email"
                               className="form-style"
                               placeholder="Email"
-                              value={newusername}
-                              onChange={(e) => setnewUsername(e.target.value)}
+                              value={newemail}
+                              onChange={(e) => setNewEmail(e.target.value)} // Corrigindo para setNewEmail
                             />
                             <i className="input-icon uil uil-at" />
                           </div>
@@ -128,12 +135,13 @@ function App() {
                               className="form-style"
                               placeholder="Password"
                               value={newpassword}
-                              onChange={(e) => setnewPassword(e.target.value)}
+                              onChange={(e) => setNewPassword(e.target.value)}
                             />
                             <i className="input-icon uil uil-lock-alt" />
                           </div>
                           <button type="submit" className="btn mt-4">Register</button>
-                          {wrongRegister && <p className="error-message">Erro ao registrar. Por favor, tente novamente.</p>}
+                          {registerError && <p className="error-message">Erro ao registrar. Por favor, tente novamente.</p>}
+                          {registerSuccess && <p className="success-message">Registro bem-sucedido!</p>}
                         </form>
                       </div>
                     </div>
@@ -173,4 +181,4 @@ function Carrossel() {
   );
 }
 
-export default App;
+export default Login;

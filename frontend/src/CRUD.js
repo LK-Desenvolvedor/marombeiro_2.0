@@ -58,7 +58,6 @@ const CRUD = () => {
                 <button onClick={saveEdit}>Save</button>
               </>
             ) : (
-              // Exibir o item
               <>
                 {item}
                 {/* Botões para editar e excluir o item */}
